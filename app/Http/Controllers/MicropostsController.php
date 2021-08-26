@@ -6,6 +6,23 @@ use Illuminate\Http\Request;
 
 class MicropostsController extends Controller
 {
+    public function favoritedo($id)
+    {
+        // idの値でユーザを検索して取得
+        $microposts = User::findOrFail($id);
+
+        // 関係するモデルの件数をロード
+        $microposts->loadRelationshipCounts();
+
+        // ユーザのfavorite一覧を取得
+        $favoritedo = $user->favoritedo()->paginate(10);
+
+        // favorite一覧ビューでそれらを表示
+        return view('navtabs.blade', [
+            'user' => $favoritedo,
+        ]);
+    }
+    
     public function index()
     {
         $data = [];

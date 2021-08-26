@@ -7,13 +7,13 @@ class FavoritesController extends Controller
 {
     public function store(Request $request, $id)
     {
-        user()->favorite($id);
+        \Auth::user()->favorite($id);
         return back();
     }
 
     public function destroy($id)
     {
-        user()->unfavorite($id);
+        \Auth::user()->unfavorite($id);
         return back();
     }
 }

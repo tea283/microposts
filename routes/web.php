@@ -22,15 +22,28 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.post');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
+
+
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+
+    Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
+
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'users/{id}'], function () {
         Route::post('follow', 'UserFollowController@store')->name('user.follow');
         Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
         Route::get('followings', 'UsersController@followings')->name('users.followings');
         Route::get('followers', 'UsersController@followers')->name('users.followers');
+        Route::get('favorites', 'UsersController@favorites')->name('users.favorites');    // 追加
     });
 
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+
+    // 追加
+    Route::group(['prefix' => 'microposts/{id}'], function () {
+        Route::post('favorite', 'FavoritesController@store')->name('favorite.favorite');
+        Route::delete('unfavorite', 'FavoritesController@destroy')->name('favorite.unfavorite');
+    });
 
     Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
 });
